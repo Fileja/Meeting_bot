@@ -79,7 +79,7 @@ COPY <<EOF /etc/pulse/default.pa
 # mode.
 
 ### Load core protocols modules
-load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket
+load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket auth-cookie-enabled=0
 
 ### Make sure we always have a sink/source, even if something is wrong with the
 ### hardware detection
@@ -109,8 +109,11 @@ EOF
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-# Start PulseAudio\n\
-pulseaudio --start --log-level=4 --file=/etc/pulse/default.pa\n\
+# Start PulseAudio with proper configuration\n\
+pulseaudio --start --log-level=4 --file=/etc/pulse/default.pa --disallow-exit --disallow-module-loading=false --high-priority --realtime --no-drop-root --system=0\n\
+\n\
+# Wait for PulseAudio to be ready\n\
+sleep 3\n\
 \n\
 # Start virtual display\n\
 Xvfb :99 -screen 0 1280x800x24 &\n\
