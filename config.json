@@ -1,0 +1,28 @@
+{
+  "botName": "TestBot",
+  "sessionRoot": "/tmp/realtime-sessions",
+  "chromeBin": "chromium",
+  "windowSize": "1280,800",
+  "display": {
+    "min": 90,
+    "max": 150,
+    "resolution": "1280x800x24"
+  },
+  "audio": {
+    "sinkPrefix": "audio_sink",
+    "sinkScope": "per_display",
+    "rate": 16000,
+    "chunkMs": 20
+  },
+  "timeouts": {
+    "meetReloadMs": 4000,
+    "meetOverallMs": 180000
+  },
+  "transcription": {
+    "apiKeyFile": "data.json",
+    "model": "gpt-4o-transcribe",
+    "language": "lv",
+    "wsUrl": "wss://api.openai.com/v1/realtime?intent=transcription",
+    "forwarderUrl": "ws://127.0.0.1:9090/ingest"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "realtime-transcribtion-bot",
+  "version": "1.0.0",
+  "description": "A bot for joining and transcribing meetings from Zoom, Google Meet, and MS Teams.",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "puppeteer-core": "^22.10.0",
+    "ws": "^8.17.0"
+  }
+}

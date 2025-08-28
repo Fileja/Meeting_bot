@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+
+# Session files
+/tmp/realtime-sessions/
+
+# Log files
+*.log
+
+# API Keys
+data.json
