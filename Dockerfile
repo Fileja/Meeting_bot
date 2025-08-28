@@ -79,7 +79,7 @@ COPY <<EOF /etc/pulse/default.pa
 # mode.
 
 ### Load core protocols modules
-load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket auth-cookie-enabled=0
+load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket auth-cookie-enabled=0 auth-ip-acl=127.0.0.1
 
 ### Make sure we always have a sink/source, even if something is wrong with the
 ### hardware detection
@@ -109,11 +109,19 @@ EOF
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-# Start PulseAudio with proper configuration\n\
-pulseaudio --start --log-level=4 --file=/etc/pulse/default.pa --disallow-exit --disallow-module-loading=false --high-priority --realtime --no-drop-root --system=0\n\
+# Set environment variables for PulseAudio\n\
+export PULSE_SERVER=unix:/tmp/pulse-socket\n\
+export PULSE_COOKIE=/tmp/pulse-cookie\n\
+\n\
+# Start PulseAudio daemon\n\
+pulseaudio --start --log-level=4 --file=/etc/pulse/default.pa --disallow-exit --disallow-module-loading=false --high-priority --realtime --no-drop-root --system=0 --exit-idle-time=-1\n\
 \n\
 # Wait for PulseAudio to be ready\n\
-sleep 3\n\
+sleep 5\n\
+\n\
+# Verify PulseAudio is running\n\
+pactl info || echo "PulseAudio not ready yet, waiting..."\n\
+sleep 2\n\
 \n\
 # Start virtual display\n\
 Xvfb :99 -screen 0 1280x800x24 &\n\
